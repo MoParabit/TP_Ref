@@ -1,13 +1,15 @@
 package pages;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.Configuration;
+import utils.IConstant;
+
 import static common.CommonActions.*;
-import static common.CommonWaits.*;
 import static utils.IConstant.*;
 
 import java.time.Duration;
@@ -52,7 +54,7 @@ public class RmaAccounting {
 	@FindBy(xpath = "//td[@data-field='SerialNumber']")
 	WebElement serialNumberTextField;
 	@FindBy(xpath = "(//span[@role='button'])[6]")
-	WebElement productUnderWarrentyDropdownBtn;
+	WebElement productUnderWarrantyDropdownBtn;
 	@FindBy(xpath = "//div[@id='submitBtnLbl']")
 	WebElement submitBtnForCaseForm;
 
@@ -60,6 +62,8 @@ public class RmaAccounting {
 		inputText(usernameField, configuration.getProperties(USERNAME));
 		inputText(passwordField, configuration.getProperties(PASSWORD));
 		clickElement(signInBtn);
+		clickElement(rmaAccountingBtn);
+		clickElement(casesBtn);
 	}
 
 	public void endOfLife() {
@@ -75,8 +79,8 @@ public class RmaAccounting {
 		verifyTextOfTheWebElement(trackingNumberField, trackingNumber);
 		scrollIntoViewTheElementUsingJavascriptExecutor(driver, serialNumberTextField);
 		verifyTextOfTheWebElement(serialNumberTextField, serialNumber);
-		clickElement(productUnderWarrentyDropdownBtn);
-		inputText(productUnderWarrentyDropdownBtn, "No");
+		clickElement(productUnderWarrantyDropdownBtn);
+		inputText(productUnderWarrantyDropdownBtn, "No");
 		// clickElement(submitBtnForCaseForm);
 	}
 
@@ -93,8 +97,8 @@ public class RmaAccounting {
 		verifyTextOfTheWebElement(trackingNumberField, trackingNumber);
 		scrollIntoViewTheElementUsingJavascriptExecutor(driver, serialNumberTextField);
 		verifyTextOfTheWebElement(serialNumberTextField, serialNumber);
-		clickElement(productUnderWarrentyDropdownBtn);
-		inputText(productUnderWarrentyDropdownBtn, "No");
+		clickElement(productUnderWarrantyDropdownBtn);
+		inputText(productUnderWarrantyDropdownBtn, "Yes");
 		// clickElement(submitBtnForCaseForm);
 	}
 
@@ -107,12 +111,45 @@ public class RmaAccounting {
 		verifyTextOfTheWebElement(currentStatus, "Rejected");
 		String serialNumber = serialNumberField.getText();
 		clickElement(caseNumberField);
+		pause(3000);
+		Alert alert = driver.switchTo().alert();
+		System.out.println("\nAlert Text: " + alert.getText());
+		alert.accept();
 		String trackingNumber = trackingNumberField.getText();
 		verifyTextOfTheWebElement(trackingNumberField, trackingNumber);
 		scrollIntoViewTheElementUsingJavascriptExecutor(driver, serialNumberTextField);
 		verifyTextOfTheWebElement(serialNumberTextField, serialNumber);
-		clickElement(productUnderWarrentyDropdownBtn);
-		inputText(productUnderWarrentyDropdownBtn, "No");
+		clickElement(productUnderWarrantyDropdownBtn);
+		inputText(productUnderWarrantyDropdownBtn, "No");
 		// clickElement(submitBtnForCaseForm);
+	}
+
+	public void finalTest(String status) {
+
+		RmaAccounting ra = new RmaAccounting(driver);
+
+
+		switch (status) {
+			case "End Of Life":
+				if ("End Of Life".equals(currentStatus.getText())){
+				ra.endOfLife();
+				}
+				break;
+
+			case "Evaluated":
+				if ("Evaluated".equals(currentStatus.getText())){
+					ra.evaluated();
+				}
+				break;
+
+			case "Rejected":
+				if ("Rejected".equals(currentStatus.getText())){
+					ra.rejected();
+				}
+				break;
+
+			default:
+				throw new RuntimeException("Status Not Valid. Use only End Of Life, Evaluated or Rejected");
+		}
 	}
 }

@@ -13,5 +13,9 @@ public interface IConstant {
 	String SAFARI = "safari";
 	String USERNAME = "username";
 	String PASSWORD = "password";
+	String  END_OF_LIFE = "end_of_life";
+	String EVALUATED = "evaluated";
+	String REJECTED = "rejected";
+
 
 }

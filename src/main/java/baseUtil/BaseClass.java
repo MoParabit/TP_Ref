@@ -94,6 +94,7 @@ public class BaseClass {
 	}
 	
 	public void initClass() {
+
 		rmaAccounting = new RmaAccounting(driver);
 	}
 		

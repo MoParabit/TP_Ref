@@ -3,8 +3,6 @@ package pagesTest;
 import org.testng.annotations.Test;
 
 import baseUtil.BaseClass;
-import pages.RmaAccounting;
-import utils.IConstant;
 
 public class RmaAccountingTest extends BaseClass {
 
@@ -27,9 +25,9 @@ public class RmaAccountingTest extends BaseClass {
 	}
 
 	@Test
-	public void entireAccountingModuleTest(){
+	public void accountingModuleTest(){
 		rmaAccounting.login();
-		rmaAccounting.finalTest("status");
+		rmaAccounting.statusCheck();
+		rmaAccounting.finalTest();
 	}
-
 }

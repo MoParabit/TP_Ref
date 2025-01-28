@@ -1,13 +1,11 @@
 package pages;
 
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import utils.Configuration;
-import utils.IConstant;
 
 import static common.CommonActions.*;
 import static utils.IConstant.*;
@@ -58,21 +56,35 @@ public class RmaAccounting {
 	@FindBy(xpath = "//div[@id='submitBtnLbl']")
 	WebElement submitBtnForCaseForm;
 
+	@FindBy(xpath = "(//a[@title='Filter'])[1]")
+	WebElement filterIconForCaseId;
+	@FindBy(xpath = "//button[text()='Filter']")
+	WebElement filterBtnForCaseId;
+	@FindBy(xpath = "//input[@data-bind='value:filters[0].value']")
+	WebElement textFieldForCaseId;
+
 	public void login() {
 		inputText(usernameField, configuration.getProperties(USERNAME));
 		inputText(passwordField, configuration.getProperties(PASSWORD));
 		clickElement(signInBtn);
+	}
+
+	public void statusCheck(){
 		clickElement(rmaAccountingBtn);
 		clickElement(casesBtn);
+		clickElement(filterIconForCaseId);
+		inputText(textFieldForCaseId,"PBT1350");
+		clickElement(filterBtnForCaseId);
+		verifyTextOfTheWebElement(currentStatus,"Evaluated");
 	}
 
 	public void endOfLife() {
-		clickElement(rmaAccountingBtn);
-		clickElement(casesBtn);
-		clickElement(filterIconForStatus);
-		inputText(filterTextFieldForStatus, "End of Life");
-		clickElement(filterBtnForStatus);
-		verifyTextOfTheWebElement(currentStatus, "End of Life");
+		//clickElement(rmaAccountingBtn);
+		//clickElement(casesBtn);
+		//clickElement(filterIconForStatus);
+		//inputText(filterTextFieldForStatus, "End of Life");
+		//clickElement(filterBtnForStatus);
+		//verifyTextOfTheWebElement(currentStatus, "End of Life");
 		String serialNumber = serialNumberField.getText();
 		clickElement(caseNumberField);
 		String trackingNumber = trackingNumberField.getText();
@@ -85,12 +97,12 @@ public class RmaAccounting {
 	}
 
 	public void evaluated() {
-		clickElement(rmaAccountingBtn);
-		clickElement(casesBtn);
-		clickElement(filterIconForStatus);
-		inputText(filterTextFieldForStatus, "Evaluated");
-		clickElement(filterBtnForStatus);
-		verifyTextOfTheWebElement(currentStatus, "Evaluated");
+//		clickElement(rmaAccountingBtn);
+//		clickElement(casesBtn);
+//		clickElement(filterIconForStatus);
+//		inputText(filterTextFieldForStatus, "Evaluated");
+//		clickElement(filterBtnForStatus);
+//		verifyTextOfTheWebElement(currentStatus, "Evaluated");
 		String serialNumber = serialNumberField.getText();
 		clickElement(caseNumberField);
 		String trackingNumber = trackingNumberField.getText();
@@ -103,18 +115,18 @@ public class RmaAccounting {
 	}
 
 	public void rejected() {
-		clickElement(rmaAccountingBtn);
-		clickElement(casesBtn);
-		clickElement(filterIconForStatus);
-		inputText(filterTextFieldForStatus, "Rejected");
-		clickElement(filterBtnForStatus);
-		verifyTextOfTheWebElement(currentStatus, "Rejected");
+//		clickElement(rmaAccountingBtn);
+//		clickElement(casesBtn);
+//		clickElement(filterIconForStatus);
+//		inputText(filterTextFieldForStatus, "Rejected");
+//		clickElement(filterBtnForStatus);
+//		verifyTextOfTheWebElement(currentStatus, "Rejected");
 		String serialNumber = serialNumberField.getText();
 		clickElement(caseNumberField);
 		pause(3000);
-		Alert alert = driver.switchTo().alert();
-		System.out.println("\nAlert Text: " + alert.getText());
-		alert.accept();
+//		Alert alert = driver.switchTo().alert();
+//		System.out.println("\nAlert Text: " + alert.getText());
+//		alert.accept();
 		String trackingNumber = trackingNumberField.getText();
 		verifyTextOfTheWebElement(trackingNumberField, trackingNumber);
 		scrollIntoViewTheElementUsingJavascriptExecutor(driver, serialNumberTextField);
@@ -124,28 +136,24 @@ public class RmaAccounting {
 		// clickElement(submitBtnForCaseForm);
 	}
 
-	public void finalTest(String status) {
+	public void finalTest() {
 
 		RmaAccounting ra = new RmaAccounting(driver);
-
-
+		String status = currentStatus.getText();
 		switch (status) {
-			case "End Of Life":
-				if ("End Of Life".equals(currentStatus.getText())){
+			case "End of Life":
 				ra.endOfLife();
-				}
+				System.out.println("End of Life executed");
 				break;
 
 			case "Evaluated":
-				if ("Evaluated".equals(currentStatus.getText())){
 					ra.evaluated();
-				}
+				System.out.println("Evaluated executed");
 				break;
 
 			case "Rejected":
-				if ("Rejected".equals(currentStatus.getText())){
 					ra.rejected();
-				}
+				System.out.println("Rejected executed");
 				break;
 
 			default:
